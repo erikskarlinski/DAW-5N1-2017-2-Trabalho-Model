@@ -7,9 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -29,10 +32,15 @@ public class Exame implements Serializable {
     @Column(name = "nome", length = 40, nullable = false)
     private String nome;
     @NotNull(message = "A Descrição não pode ser nulo")
-    @NotBlank(message = "A Descriçãonão pode ser em branco")
+    @NotBlank(message = "A Descrição não pode ser em branco")
     @Length(max = 140, message = "A Descriçãoe não pode ter mais que {max} caracteres")
     @Column(name = "descricao", length = 140, nullable = false)
     private String descricao;
+    
+    @ManyToOne
+    @JoinColumn(name = "consulta", referencedColumnName = "id", nullable = false)
+    @ForeignKey(name = "fk_consulta")
+    private Consulta consulta;
 
     public Exame() {
 
@@ -85,6 +93,14 @@ public class Exame implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Consulta getConsulta() {
+        return consulta;
+    }
+
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
     }
 
 }

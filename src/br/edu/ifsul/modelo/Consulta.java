@@ -48,21 +48,38 @@ public class Consulta implements Serializable {
     @NotNull(message = "O paciente deve ser informado")
     @ManyToOne
     @JoinColumn(name = "paciente", referencedColumnName = "id", nullable = false)
-    private Paciente paciente;    
+    private Paciente paciente;
     @NotNull(message = "O medico deve ser informado")
     @ManyToOne
     @JoinColumn(name = "medico", referencedColumnName = "id", nullable = false)
     private Medico medico;
-//    
-//    @OneToMany(mappedBy = "exame", cascade = CascadeType.ALL,
-//            orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Exame> exames = new ArrayList<>();
-//    @OneToMany(mappedBy = "receituario", cascade = CascadeType.ALL,
-//            orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Receituario> receitas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Exame> listaExames = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Receituario> listaReceituarios  = new ArrayList<>();
 
     public Consulta() {
-       
+
+    }
+
+    public void adicionarExame(Exame obj) {
+        obj.setConsulta(this);
+        this.getListaExames().add(obj);
+    }
+
+    public void removerExame(int index) {
+        this.getListaExames().remove(index);
+    }
+
+   public void adicionarReceituario(Receituario obj){
+        obj.setConsulta(this);
+        this.getListaReceituarios().add(obj);
+    }
+    
+    public void removerReceituario(int index){
+        this.getListaReceituarios().remove(index);
     }
 
     public Integer getId() {
@@ -113,21 +130,6 @@ public class Consulta implements Serializable {
         this.medico = medico;
     }
 
-//    public List<Exame> getExames() {
-//        return exames;
-//    }
-//
-//    public void setExames(List<Exame> exames) {
-//        this.exames = exames;
-//    }
-
-//    public List<Receituario> getReceitas() {
-//        return receitas;
-//    }
-//
-//    public void setReceitas(List<Receituario> receitas) {
-//        this.receitas = receitas;
-//    }
 
     @Override
     public int hashCode() {
@@ -153,8 +155,25 @@ public class Consulta implements Serializable {
         }
         return true;
     }
-    
- 
-    
+
+   
+
+   
+
+    public List<Exame> getListaExames() {
+        return listaExames;
+    }
+
+    public void setListaExames(List<Exame> listaExames) {
+        this.listaExames = listaExames;
+    }
+
+    public List<Receituario> getListaReceituarios() {
+        return listaReceituarios;
+    }
+
+    public void setListaReceituarios(List<Receituario> listaReceituarios) {
+        this.listaReceituarios = listaReceituarios;
+    }
 
 }

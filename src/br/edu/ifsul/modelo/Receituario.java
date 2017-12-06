@@ -24,7 +24,6 @@ import org.hibernate.annotations.ForeignKey;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-
 @Entity
 @Table(name = "receituario")
 public class Receituario implements Serializable {
@@ -33,18 +32,22 @@ public class Receituario implements Serializable {
     @SequenceGenerator(name = "seq_receituario", sequenceName = "seq_receituario_id", allocationSize = 1)
     @GeneratedValue(generator = "seq_receituario", strategy = GenerationType.SEQUENCE)
     private Integer id;
-   @Column(name = "posologia")
+    @Column(name = "posologia")
     private String posologia;
     @NotNull(message = "A data de validade deve ser informada")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_validade", nullable = false)
     private Calendar data_nascimento;
+    @NotNull(message = "a consulta deve ser informado")
+    @ManyToOne
+    @JoinColumn(name = "consulta", referencedColumnName = "id", nullable = false)
+    private Consulta consulta;
     @ManyToMany
     @JoinTable(name = "medicamento_receituario",
-            joinColumns = 
-            @JoinColumn(name = "receituario", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = 
-            @JoinColumn(name = "medicamento", referencedColumnName = "id", nullable = false))    
+            joinColumns
+            = @JoinColumn(name = "receituario", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns
+            = @JoinColumn(name = "medicamento", referencedColumnName = "id", nullable = false))
     private List<Medicamento> medicamentos = new ArrayList<>();
 
     public Receituario() {
@@ -107,6 +110,12 @@ public class Receituario implements Serializable {
         return true;
     }
 
-   
+    public Consulta getConsulta() {
+        return consulta;
+    }
+
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
+    }
 
 }
